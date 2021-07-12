@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.thedudemc.ninjabot.event.BotSetupEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,12 +24,11 @@ public class NinjaBot extends ListenerAdapter {
             return;
         }
 
-
         String token = args[0];
 
         JDABuilder builder = JDABuilder.createDefault(token);
         builder.enableIntents(EnumSet.allOf(GatewayIntent.class));
-        builder.addEventListeners(new BotSetup());
+        builder.addEventListeners(new BotSetupEvents());
         JDA = builder.build();
     }
 
