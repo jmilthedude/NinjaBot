@@ -3,8 +3,8 @@ package net.thedudemc.ninjabot.event;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.thedudemc.ninjabot.command.BotCommand;
-import net.thedudemc.ninjabot.command.InvalidCommandException;
+import net.thedudemc.ninjabot.command.base.BotCommand;
+import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
 import net.thedudemc.ninjabot.init.BotCommands;
 import org.jetbrains.annotations.NotNull;
 

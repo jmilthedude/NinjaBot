@@ -2,6 +2,7 @@ package net.thedudemc.ninjabot.event;
 
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.init.BotCommands;
 import net.thedudemc.ninjabot.init.BotEvents;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,6 @@ public class BotSetupEvents extends ListenerAdapter {
         BotEvents.register();
         BotCommands.register();
 
-        super.onReady(event);
+        NinjaBot.getLogger().info("NinjaBot setup complete!");
     }
 }

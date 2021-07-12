@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.command;
+package net.thedudemc.ninjabot.command.exception;
 
 public class InvalidCommandException extends RuntimeException {
 

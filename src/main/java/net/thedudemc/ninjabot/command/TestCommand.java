@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.thedudemc.ninjabot.NinjaBot;
+import net.thedudemc.ninjabot.command.base.BotCommand;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

@@ -13,7 +13,7 @@ import java.util.EnumSet;
 
 public class NinjaBot extends ListenerAdapter {
 
-    private static Logger LOG = LoggerFactory.getLogger(NinjaBot.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NinjaBot.class);
     public static JDA JDA;
 
     public static void main(String[] args) throws LoginException {
