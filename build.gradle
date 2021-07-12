@@ -23,12 +23,12 @@ repositories {
 
 dependencies {
     implementation("net.dv8tion:JDA:4.3.0_296")
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation("com.google.code.gson:gson:2.8.6")
     implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0'
-    implementation 'com.vdurmont:emoji-java:5.1.1'
+    implementation("org.xerial:sqlite-jdbc:3.34.0")
+    implementation("com.vdurmont:emoji-java:5.1.1")
 
-    implementation 'net.thedudemc:dudeconfig:0.4.2-SNAPSHOT'
+    implementation("net.thedudemc:dudeconfig:0.4.2-SNAPSHOT")
 
 }
 
