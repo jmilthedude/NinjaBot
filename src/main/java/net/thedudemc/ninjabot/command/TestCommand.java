@@ -1,5 +1,6 @@
 package net.thedudemc.ninjabot.command;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -21,8 +22,8 @@ public class TestCommand extends BotCommand {
     }
 
     @Override
-    public void execute(Member member, MessageChannel channel, Message message, @Nullable String[] args) {
-        NinjaBot.getLogger().info("Member: " + member.getEffectiveName());
+    public void execute(@Nullable Guild guild, @Nullable Member member, MessageChannel channel, Message message, @Nullable String[] args) {
+        if (member != null) NinjaBot.getLogger().info("Member: " + member.getEffectiveName());
         NinjaBot.getLogger().info("Channel: " + channel.getName());
         NinjaBot.getLogger().info("Content: " + message.getContentDisplay());
         if (args != null) NinjaBot.getLogger().info("Arguments: " + Arrays.toString(args));

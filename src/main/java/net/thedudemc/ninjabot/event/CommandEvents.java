@@ -1,6 +1,9 @@
 package net.thedudemc.ninjabot.event;
 
 import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.thedudemc.ninjabot.command.base.BotCommand;
@@ -15,10 +18,13 @@ public class CommandEvents extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        Guild guild = event.isFromType(ChannelType.TEXT) ? event.getGuild() : null;
+        Member member = event.getMember();
+
         String content = event.getMessage().getContentRaw();
         if (!content.startsWith("-")) return; // not a command.
 
-        final boolean deleteCommands = BotConfigs.getConfig("General").getBoolean("deleteCommands");
+        final boolean deleteCommands = guild != null && BotConfigs.getConfig(guild, "General").getBoolean("deleteCommands");
 
         try {
             String commandName = content.contains(" ") ? content.substring(1, content.indexOf(" ")) : content.substring(1);
@@ -27,7 +33,7 @@ public class CommandEvents extends ListenerAdapter {
             String[] args = content.contains(" ") ? content.substring(content.indexOf(" ") + 1).split(" ") : null;
 
             if (command.canExecute(event.getMember())) {
-                command.execute(event.getMember(), event.getChannel(), event.getMessage(), args);
+                command.execute(guild, member, event.getChannel(), event.getMessage(), args);
             }
         } catch (InvalidCommandException exception) {
             event.getChannel().sendMessage(new MessageBuilder(exception.getMessage()).build())
