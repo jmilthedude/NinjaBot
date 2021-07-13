@@ -34,7 +34,7 @@
 *.iws
 .idea/
 /config/
-/db/
+/data/
 # Project exclude paths
 /out/
 /out/production/classes/
