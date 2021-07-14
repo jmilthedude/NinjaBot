@@ -18,8 +18,10 @@ public class CommandEvents extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
         Guild guild = event.isFromType(ChannelType.TEXT) ? event.getGuild() : null;
         Member member = event.getMember();
+
 
         String content = event.getMessage().getContentRaw();
         if (!content.startsWith("-")) return; // not a command.

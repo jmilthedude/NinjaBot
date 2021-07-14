@@ -1,7 +1,8 @@
-package net.thedudemc.ninjabot.data;
+package net.thedudemc.ninjabot.ticket;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.thedudemc.ninjabot.NinjaBot;
+import net.thedudemc.ninjabot.data.Data;
 import net.thedudemc.ninjabot.init.BotData;
 
 import java.sql.*;

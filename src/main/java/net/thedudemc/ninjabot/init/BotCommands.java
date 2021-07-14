@@ -1,6 +1,7 @@
 package net.thedudemc.ninjabot.init;
 
 import net.thedudemc.ninjabot.NinjaBot;
+import net.thedudemc.ninjabot.ticket.TicketCommand;
 import net.thedudemc.ninjabot.command.base.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
 import net.thedudemc.ninjabot.command.TestCommand;
@@ -15,6 +16,7 @@ public class BotCommands {
         NinjaBot.getLogger().info("Registering commands...");
 
         registerCommand(new TestCommand());
+        registerCommand(new TicketCommand());
     }
 
     private static void registerCommand(BotCommand command) {
