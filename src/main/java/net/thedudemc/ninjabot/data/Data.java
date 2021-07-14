@@ -6,11 +6,11 @@ public interface Data {
 
     String getTableName();
 
-    Data create(long guildId);
+    Data create();
 
-    int insert(long guildId);
+    int insert();
 
-    Data get(long channelId);
+    Data get(long guildId, long channelId);
 
     List<Data> getAll();
 

@@ -1,10 +1,10 @@
 package net.thedudemc.ninjabot.init;
 
 import net.thedudemc.ninjabot.NinjaBot;
-import net.thedudemc.ninjabot.ticket.TicketCommand;
+import net.thedudemc.ninjabot.command.TestCommand;
 import net.thedudemc.ninjabot.command.base.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
-import net.thedudemc.ninjabot.command.TestCommand;
+import net.thedudemc.ninjabot.ticket.*;
 
 import java.util.HashMap;
 
@@ -17,6 +17,7 @@ public class BotCommands {
 
         registerCommand(new TestCommand());
         registerCommand(new TicketCommand());
+        registerCommand(new CloseCommand());
     }
 
     private static void registerCommand(BotCommand command) {

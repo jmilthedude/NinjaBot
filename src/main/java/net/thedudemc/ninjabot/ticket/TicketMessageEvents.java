@@ -63,8 +63,8 @@ public class TicketMessageEvents extends ListenerAdapter {
         category.createTextChannel(StringUtilities.stripName(member.getEffectiveName()))
                 .addMemberPermissionOverride(member.getIdLong(), getPermissions(), null)
                 .queue(textChannel -> {
-                    Ticket ticket = new Ticket(member, textChannel.getIdLong(), message.getContentRaw(), new Date());
-                    int id = ticket.insert(guild.getIdLong());
+                    Ticket ticket = new Ticket(guild, member, textChannel.getIdLong(), message.getContentRaw(), new Date());
+                    int id = ticket.insert();
                     textChannel.getManager().setName(textChannel.getName() + "-" + String.format("%04d", id)).queue();
                     sendTicketOpenMessage(message, guild, member, textChannel);
                 });

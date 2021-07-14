@@ -15,7 +15,7 @@ public abstract class BotCommand {
 
     public abstract String getDescription();
 
-    public abstract void execute(Guild guild, @Nullable Member member, MessageChannel channel, Message message, @Nullable String[] args);
+    public abstract void execute(@Nullable Guild guild, @Nullable Member member, MessageChannel channel, Message message, @Nullable String[] args);
 
     public BotCommand requireElevatedPrivileges() {
         requiresElevatedPrivileges = true;
