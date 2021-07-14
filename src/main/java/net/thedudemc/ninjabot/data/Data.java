@@ -8,7 +8,7 @@ public interface Data {
 
     Data create(long guildId);
 
-    Data insert(long guildId);
+    int insert(long guildId);
 
     Data get(long channelId);
 

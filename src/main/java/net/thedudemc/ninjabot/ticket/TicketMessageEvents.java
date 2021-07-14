@@ -23,6 +23,7 @@ public class TicketMessageEvents extends ListenerAdapter {
     public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
         long userId = event.getAuthor().getIdLong();
+
         boolean isTicketCreator = ticketCreators.stream().anyMatch(ticketCreator -> userId == ticketCreator.getMemberId());
 
         if (!isTicketCreator) {
@@ -33,6 +34,7 @@ public class TicketMessageEvents extends ListenerAdapter {
         }
 
         Optional<TicketCreator> creatorOptional = ticketCreators.stream().filter(ticketCreator -> userId == ticketCreator.getMemberId()).findFirst();
+
         creatorOptional.ifPresent(ticketCreator -> {
             if (!event.getMessage().getContentRaw().startsWith("cancel")) {
                 createNewTicket(ticketCreator, event.getMessage());
@@ -61,7 +63,9 @@ public class TicketMessageEvents extends ListenerAdapter {
         category.createTextChannel(StringUtilities.stripName(member.getEffectiveName()))
                 .addMemberPermissionOverride(member.getIdLong(), getPermissions(), null)
                 .queue(textChannel -> {
-                    //TODO set channel name to include ID
+                    Ticket ticket = new Ticket(member, textChannel.getIdLong(), message.getContentRaw(), new Date());
+                    int id = ticket.insert(guild.getIdLong());
+                    textChannel.getManager().setName(textChannel.getName() + "-" + String.format("%04d", id)).queue();
                     sendTicketOpenMessage(message, guild, member, textChannel);
                 });
     }

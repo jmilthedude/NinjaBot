@@ -78,6 +78,7 @@ public class Ticket implements Data {
     @Override
     public Data create(long guildId) {
         String query = "CREATE TABLE IF NOT EXISTS \"Tickets\" (" +
+                "\"ID\"	INTEGER NOT NULL UNIQUE," +
                 "\"ChannelID\"	INTEGER NOT NULL UNIQUE," +
                 "\"CreatorID\"	INTEGER NOT NULL," +
                 "\"CreatorName\" TEXT NOT NULL," +
@@ -85,12 +86,12 @@ public class Ticket implements Data {
                 "\"CreationTime\" INTEGER NOT NULL," +
                 "\"ClosedTime\" INTEGER," +
                 "\"Closed\" INTEGER NOT NULL," +
-                "PRIMARY KEY(\"ChannelID\"" +
+                "PRIMARY KEY(\"ID\" AUTOINCREMENT)" +
                 ");";
 
         try (Connection conn = BotData.getConnection(guildId)) {
             try (Statement statement = conn.createStatement()) {
-                statement.executeQuery(query);
+                statement.execute(query);
             }
         } catch (SQLException exception) {
             NinjaBot.getLogger().error(exception.getMessage());
@@ -100,7 +101,8 @@ public class Ticket implements Data {
     }
 
     @Override
-    public Data insert(long guildId) {
+    public int insert(long guildId) {
+        create(guildId);
         String query = "INSERT INTO Tickets " +
                 "(ChannelID, " +
                 "CreatorID, " +
@@ -113,20 +115,26 @@ public class Ticket implements Data {
 
         try (Connection conn = BotData.getConnection(guildId)) {
             try (PreparedStatement statement = conn.prepareStatement(query)) {
-                statement.setLong(0, this.channelId);
-                statement.setLong(1, this.creatorId);
-                statement.setString(2, this.creatorName);
-                statement.setString(3, this.message);
-                statement.setTimestamp(4, new Timestamp(this.creationTime.getTime()));
-                statement.setTimestamp(5, this.closeTime == null ? null : new Timestamp(this.closeTime.getTime()));
-                statement.setBoolean(6, this.closed);
+                statement.setLong(1, this.channelId);
+                statement.setLong(2, this.creatorId);
+                statement.setString(3, this.creatorName);
+                statement.setString(4, this.message);
+                statement.setTimestamp(5, new Timestamp(this.creationTime.getTime()));
+                statement.setTimestamp(6, this.closeTime == null ? null : new Timestamp(this.closeTime.getTime()));
+                statement.setBoolean(7, this.closed);
 
                 statement.execute();
+                try (Statement stmt = conn.createStatement()) {
+                    return stmt.executeQuery("SELECT ID from Tickets WHERE ChannelID = " + this.channelId).getInt("ID");
+                }
             }
         } catch (SQLException exception) {
             NinjaBot.getLogger().error(exception.getMessage());
+            for (StackTraceElement stackTraceElement : exception.getStackTrace()) {
+                NinjaBot.getLogger().error(stackTraceElement.toString());
+            }
         }
-        return this;
+        return -1;
     }
 
     @Override
