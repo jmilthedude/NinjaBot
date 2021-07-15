@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 public abstract class BotCommand {
 
     private boolean requiresElevatedPrivileges;
+    private boolean requiresAdminPrivileges;
 
     public abstract String getName();
 
@@ -22,8 +23,13 @@ public abstract class BotCommand {
         return this;
     }
 
+    public BotCommand requireAdmin() {
+        requiresAdminPrivileges = true;
+        return this;
+    }
+
     public boolean canExecute(Member member) {
-        if (this.requiresElevatedPrivileges) {
+        if (this.requiresElevatedPrivileges || this.requiresAdminPrivileges) {
             if (member == null) return false;
             // TODO: check member privileges
             return false;
