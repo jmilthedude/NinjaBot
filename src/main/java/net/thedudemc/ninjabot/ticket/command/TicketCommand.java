@@ -1,8 +1,9 @@
-package net.thedudemc.ninjabot.ticket;
+package net.thedudemc.ninjabot.ticket.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.thedudemc.ninjabot.command.base.BotCommand;
+import net.thedudemc.ninjabot.command.BotCommand;
+import net.thedudemc.ninjabot.ticket.listener.TicketListener;
 import org.jetbrains.annotations.Nullable;
 
 public class TicketCommand extends BotCommand {
@@ -32,7 +33,7 @@ public class TicketCommand extends BotCommand {
                                     "If you did not mean to do this, type cancel. " +
                                     "Otherwise, state your issue."
                     )
-            ).queue(msg -> TicketMessageEvents.addTicketCreator(guild, member));
+            ).queue(msg -> TicketListener.addTicketCreator(guild, member));
         }
     }
 }

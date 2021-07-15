@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.event;
+package net.thedudemc.ninjabot.command.listener;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.thedudemc.ninjabot.command.base.BotCommand;
+import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
 import net.thedudemc.ninjabot.init.BotCommands;
 import net.thedudemc.ninjabot.init.BotConfigs;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public class CommandEvents extends ListenerAdapter {
+public class CommandListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {

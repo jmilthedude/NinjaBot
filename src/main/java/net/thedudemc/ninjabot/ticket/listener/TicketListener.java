@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.ticket;
+package net.thedudemc.ninjabot.ticket.listener;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -6,12 +6,14 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.thedudemc.ninjabot.NinjaBot;
+import net.thedudemc.ninjabot.ticket.Ticket;
+import net.thedudemc.ninjabot.ticket.TicketCreator;
 import net.thedudemc.ninjabot.util.StringUtilities;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class TicketMessageEvents extends ListenerAdapter {
+public class TicketListener extends ListenerAdapter {
 
     private static final Set<TicketCreator> ticketCreators = new HashSet<>();
 

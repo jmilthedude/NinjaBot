@@ -1,8 +1,9 @@
-package net.thedudemc.ninjabot.ticket;
+package net.thedudemc.ninjabot.ticket.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.thedudemc.ninjabot.command.base.BotCommand;
+import net.thedudemc.ninjabot.command.BotCommand;
+import net.thedudemc.ninjabot.ticket.Ticket;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

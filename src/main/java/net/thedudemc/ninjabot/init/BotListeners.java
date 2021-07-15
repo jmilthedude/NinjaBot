@@ -1,17 +1,17 @@
 package net.thedudemc.ninjabot.init;
 
 import net.thedudemc.ninjabot.NinjaBot;
-import net.thedudemc.ninjabot.event.CommandEvents;
-import net.thedudemc.ninjabot.ticket.TicketMessageEvents;
+import net.thedudemc.ninjabot.command.listener.CommandListener;
+import net.thedudemc.ninjabot.ticket.listener.TicketListener;
 
-public class BotEvents {
+public class BotListeners {
 
     public static void register() {
         NinjaBot.getLogger().info("Registering events...");
 
         NinjaBot.getJDA().addEventListener(
-                new CommandEvents(),
-                new TicketMessageEvents()
+                new CommandListener(),
+                new TicketListener()
         );
     }
 }

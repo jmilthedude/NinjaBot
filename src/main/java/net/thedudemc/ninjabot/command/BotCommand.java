@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.command.base;
+package net.thedudemc.ninjabot.command;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
