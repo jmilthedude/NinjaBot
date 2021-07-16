@@ -35,12 +35,14 @@ public abstract class BotCommand {
             Config config = BotConfigs.getConfig(member.getGuild(), "General");
             if (requiresAdminPrivileges) {
                 List<String> adminRoles = (List<String>) config.getList("adminRoles");
+                if (adminRoles.isEmpty()) adminRoles.add("Administrator");
                 for (Role memberRole : memberRoles) {
                     if (adminRoles.contains(memberRole.getName())) return true;
                 }
             }
             if (requiresElevatedPrivileges) {
                 List<String> adminRoles = (List<String>) config.getList("adminRoles");
+                if (adminRoles.isEmpty()) adminRoles.add("Administrator");
                 List<String> superUserRoles = (List<String>) config.getList("superUserRoles");
                 for (Role memberRole : memberRoles) {
                     if (adminRoles.contains(memberRole.getName())) return true;

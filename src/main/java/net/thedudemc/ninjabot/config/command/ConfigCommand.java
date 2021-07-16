@@ -33,7 +33,7 @@ public class ConfigCommand extends BotCommand {
                 sendConfigHelpMessage(channel);
             }
         } else if (args.length == 3) {
-            if ("getValue".equalsIgnoreCase(args[0])) {
+            if ("get".equalsIgnoreCase(args[0])) {
                 String configName = args[1];
                 String optionName = args[2];
 
@@ -74,6 +74,7 @@ public class ConfigCommand extends BotCommand {
                     if (list.remove(value)) sendRemoveSuccessMessage(optionName, value, channel);
                 }
             }
+            config.markDirty();
             BotConfigs.saveAll(guild);
         }
     }
