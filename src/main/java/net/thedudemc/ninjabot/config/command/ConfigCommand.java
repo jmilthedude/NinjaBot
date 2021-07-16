@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.config;
+package net.thedudemc.ninjabot.config.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;

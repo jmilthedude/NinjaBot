@@ -3,7 +3,7 @@ package net.thedudemc.ninjabot.init;
 import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
-import net.thedudemc.ninjabot.config.ConfigCommand;
+import net.thedudemc.ninjabot.config.command.ConfigCommand;
 import net.thedudemc.ninjabot.ticket.command.CloseCommand;
 import net.thedudemc.ninjabot.ticket.command.TicketCommand;
 
