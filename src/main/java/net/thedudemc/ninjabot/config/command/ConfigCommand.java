@@ -82,7 +82,8 @@ public class ConfigCommand extends BotCommand {
     private void sendConfigHelpMessage(MessageChannel channel) {
         MessageBuilder builder = new MessageBuilder();
 
-        builder.append("Config Command Usage: (permission level administrator)\n\n");
+        builder.append("**Config Command Usage**:\n");
+        builder.append("*commands are case sensitive*\n\n");
 
         builder.append("**List all options:**\n");
         builder.append(" `-config list`\n\n");
