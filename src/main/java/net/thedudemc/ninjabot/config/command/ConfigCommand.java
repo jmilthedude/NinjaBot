@@ -76,8 +76,6 @@ public class ConfigCommand extends BotCommand {
             }
             BotConfigs.saveAll(guild);
         }
-
-
     }
 
     private void sendConfigHelpMessage(MessageChannel channel) {
@@ -112,9 +110,7 @@ public class ConfigCommand extends BotCommand {
         if (option.getValue() instanceof List) {
             List<?> list = (List<?>) option.getValue();
             builder.append("Values: \n");
-            list.forEach(obj -> {
-                builder.append("- **").append(String.valueOf(obj)).append("**\n");
-            });
+            list.forEach(obj -> builder.append("- **").append(String.valueOf(obj)).append("**\n"));
         } else {
             builder.append("Value: **").append(option.getValue()).append("**");
         }
@@ -128,9 +124,7 @@ public class ConfigCommand extends BotCommand {
 
         BotConfigs.getAllConfigs(guild).forEach(config -> {
             builder.append("**").append(config.getName()).append(" Config** - name: *").append(config.getName()).append("*\n");
-            config.getDefaults().forEach((name, option) -> {
-                builder.append(" - *").append(name).append("*: ").append(option.getComment()).append("\n");
-            });
+            config.getDefaults().forEach((name, option) -> builder.append(" - *").append(name).append("*: ").append(option.getComment()).append("\n"));
         });
 
         Message message = builder.build();
