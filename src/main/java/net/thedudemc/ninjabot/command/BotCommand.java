@@ -1,11 +1,11 @@
 package net.thedudemc.ninjabot.command;
 
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.*;
+import net.thedudemc.dudeconfig.config.Config;
+import net.thedudemc.ninjabot.init.BotConfigs;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class BotCommand {
 
@@ -31,7 +31,22 @@ public abstract class BotCommand {
     public boolean canExecute(Member member) {
         if (this.requiresElevatedPrivileges || this.requiresAdminPrivileges) {
             if (member == null) return false;
-            // TODO: check member privileges
+            List<Role> memberRoles = member.getRoles();
+            Config config = BotConfigs.getConfig(member.getGuild(), "General");
+            if (requiresAdminPrivileges) {
+                List<String> adminRoles = (List<String>) config.getList("adminRoles");
+                for (Role memberRole : memberRoles) {
+                    if (adminRoles.contains(memberRole.getName())) return true;
+                }
+            }
+            if (requiresElevatedPrivileges) {
+                List<String> adminRoles = (List<String>) config.getList("adminRoles");
+                List<String> superUserRoles = (List<String>) config.getList("superUserRoles");
+                for (Role memberRole : memberRoles) {
+                    if (adminRoles.contains(memberRole.getName())) return true;
+                    if (superUserRoles.contains(memberRole.getName())) return true;
+                }
+            }
             return false;
         }
         return true;

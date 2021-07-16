@@ -36,6 +36,18 @@ public class CommandListener extends ListenerAdapter {
 
             if (command.canExecute(event.getMember())) {
                 command.execute(guild, member, event.getChannel(), event.getMessage(), args);
+            } else {
+                if (member != null) {
+                    event.getChannel().sendMessage(
+                            new MessageBuilder()
+                                    .append(member.getAsMention()).append(" You do not have permission to execute that command.")
+                                    .build())
+                            .queue(message -> {
+                                if (deleteCommands) {
+                                    message.delete().queueAfter(10, TimeUnit.SECONDS);
+                                }
+                            });
+                }
             }
         } catch (InvalidCommandException exception) {
             event.getChannel().sendMessage(new MessageBuilder(exception.getMessage()).build())

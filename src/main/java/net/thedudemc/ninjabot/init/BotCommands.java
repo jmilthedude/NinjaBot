@@ -17,8 +17,8 @@ public class BotCommands {
         NinjaBot.getLogger().info("Registering commands...");
 
         registerCommand(new TicketCommand());
-        registerCommand(new CloseCommand());
-        registerCommand(new ConfigCommand());
+        registerCommand(new CloseCommand().requireElevatedPrivileges());
+        registerCommand(new ConfigCommand().requireAdmin());
     }
 
     private static void registerCommand(BotCommand command) {
