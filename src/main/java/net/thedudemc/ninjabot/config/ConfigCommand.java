@@ -25,60 +25,84 @@ public class ConfigCommand extends BotCommand {
     public void execute(@Nullable Guild guild, @Nullable Member member, MessageChannel channel, Message message, @Nullable String[] args) {
         if (guild == null || member == null) return; // must be executed within the server.
         if (args == null || args.length == 0) return;
+        if (args.length == 1) {
+            if ("list".equalsIgnoreCase(args[0])) {
+                sendOptionListMessage(guild, channel);
+            }
+            if ("help".equalsIgnoreCase(args[0])) {
+                sendConfigHelpMessage(channel);
+            }
+        } else if (args.length == 3) {
+            if ("getValue".equalsIgnoreCase(args[0])) {
+                String configName = args[1];
+                String optionName = args[2];
 
-        if ("list".equalsIgnoreCase(args[0])) {
-            if (args.length == 1) sendOptionListMessage(guild, channel);
+                Config config = BotConfigs.getConfig(guild, configName);
+                Option<?> option = config.getOption(optionName);
+                sendOptionGetMessage(channel, optionName, option);
 
-        } else if ("getValue".equalsIgnoreCase(args[0])) {
+            }
+        } else if (args.length == 4) {
             String configName = args[1];
             String optionName = args[2];
+            String value = args[3];
 
             Config config = BotConfigs.getConfig(guild, configName);
             Option<?> option = config.getOption(optionName);
-            sendOptionGetMessage(channel, optionName, option);
 
-        } else if ("setValue".equalsIgnoreCase(args[0])) {
-            if (args.length != 4) return;
-            String configName = args[1];
-            String optionName = args[2];
-            Config config = BotConfigs.getConfig(guild, configName);
-            Option<?> option = config.getOption(optionName);
-            if (option.getValue() instanceof List) {
-                return;
-            } else {
-                Class<?> type = option.getValue().getClass();
-                String value = args[3];
-                if (type.isAssignableFrom(Boolean.class)) {
-                    config.setOption(optionName, Option.of(Boolean.parseBoolean(value)).withComment(option.getComment()));
-                    sendSetSuccessMessage(optionName, value, channel);
+            if ("set".equalsIgnoreCase(args[0])) {
+                if (option.getValue() instanceof List) {
+                    return;
+                } else {
+                    Class<?> type = option.getValue().getClass();
+                    if (type.isAssignableFrom(Boolean.class)) {
+                        config.setOption(optionName, Option.of(Boolean.parseBoolean(value)).withComment(option.getComment()));
+                        sendSetSuccessMessage(optionName, value, channel);
+                    }
                 }
             }
-        } else if ("addValue".equalsIgnoreCase(args[0])) {
-            if (args.length != 4) return;
-            String configName = args[1];
-            String optionName = args[2];
-            String value = args[3];
-            Config config = BotConfigs.getConfig(guild, configName);
-            Option<?> option = config.getOption(optionName);
-            if (option.getValue() instanceof List) {
-                List<String> list = (List<String>) option.getValue();
-                list.add(value);
-                if (list.contains(value)) sendAddSuccessMessage(optionName, value, channel);
+            if ("add".equalsIgnoreCase(args[0])) {
+                if (option.getValue() instanceof List) {
+                    List<String> list = (List<String>) option.getValue();
+                    list.add(value);
+                    if (list.contains(value)) sendAddSuccessMessage(optionName, value, channel);
+                }
             }
-        } else if ("removeValue".equalsIgnoreCase(args[0])) {
-            if (args.length != 4) return;
-            String configName = args[1];
-            String optionName = args[2];
-            String value = args[3];
-            Config config = BotConfigs.getConfig(guild, configName);
-            Option<?> option = config.getOption(optionName);
-            if (option.getValue() instanceof List) {
-                List<String> list = (List<String>) option.getValue();
-                if (list.remove(value)) sendRemoveSuccessMessage(optionName, value, channel);
+            if ("remove".equalsIgnoreCase(args[0])) {
+                if (option.getValue() instanceof List) {
+                    List<String> list = (List<String>) option.getValue();
+                    if (list.remove(value)) sendRemoveSuccessMessage(optionName, value, channel);
+                }
             }
+            BotConfigs.saveAll(guild);
         }
 
-        BotConfigs.saveAll(guild);
+
+    }
+
+    private void sendConfigHelpMessage(MessageChannel channel) {
+        MessageBuilder builder = new MessageBuilder();
+
+        builder.append("Config Command Usage: (permission level administrator)\n\n");
+
+        builder.append("**List all options:**\n");
+        builder.append(" `-config list`\n\n");
+
+        builder.append("**Get a specific value:**\n");
+        builder.append(" `-config get <ConfigName> <OptionName>`\n\n");
+
+        builder.append("**Set a specific value:**\n");
+        builder.append(" `-config set <ConfigName> <OptionName> <value>`\n\n");
+
+        builder.append("**Add a value to an option list:**\n");
+        builder.append(" `-config add <ConfigName> <OptionName> <value>`\n\n");
+
+        builder.append("**Remove a value from an option list:**\n");
+        builder.append(" `-config remove <ConfigName> <OptionName> <value>`\n\n");
+
+
+        Message message = builder.build();
+        channel.sendMessage(message).queue();
     }
 
     private void sendOptionGetMessage(MessageChannel channel, String optionName, Option<?> option) {
