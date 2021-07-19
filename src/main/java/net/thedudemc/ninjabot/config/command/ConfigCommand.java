@@ -1,14 +1,20 @@
 package net.thedudemc.ninjabot.config.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.thedudemc.dudeconfig.config.Config;
 import net.thedudemc.dudeconfig.config.option.Option;
+import net.thedudemc.dudeconfig.exception.InvalidOptionException;
 import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.init.BotConfigs;
+import net.thedudemc.ninjabot.util.StringUtilities;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public class ConfigCommand extends BotCommand {
     @Override
@@ -38,7 +44,7 @@ public class ConfigCommand extends BotCommand {
                 String optionName = args[2];
 
                 Config config = BotConfigs.getConfig(guild, configName);
-                Option<?> option = config.getOption(optionName);
+                Option option = config.getOption(optionName);
                 sendOptionGetMessage(channel, optionName, option);
 
             }
@@ -46,37 +52,62 @@ public class ConfigCommand extends BotCommand {
             String configName = args[1];
             String optionName = args[2];
             String value = args[3];
+            if (value == null) return;
 
             Config config = BotConfigs.getConfig(guild, configName);
-            Option<?> option = config.getOption(optionName);
+            Option option = config.getOption(optionName);
 
             if ("set".equalsIgnoreCase(args[0])) {
-                if (option.getValue() instanceof List) {
-                    return;
-                } else {
-                    Class<?> type = option.getValue().getClass();
-                    if (type.isAssignableFrom(Boolean.class)) {
-                        config.setOption(optionName, Option.of(Boolean.parseBoolean(value)).withComment(option.getComment()));
-                        sendSetSuccessMessage(optionName, value, channel);
+                try {
+                    if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                        option.setValue(Boolean.parseBoolean(value));
+                    } else if (option.getValue() instanceof List || option.getValue() instanceof Map) {
+                        return;
+                    } else if (option.getValue() instanceof String) {
+                        option.setValue(value);
+                    } else if (StringUtilities.isNumeric(value)) {
+                        double number = Double.parseDouble(value);
+                        if (Math.floor(number) == number) option.setValue((long) Math.floor(number));
+                        else option.setValue(number);
+                    } else {
+                        option.setValue(Boolean.parseBoolean(value));
                     }
+                    sendSetSuccessMessage(optionName, value, channel);
+                } catch (InvalidOptionException exception) {
+                    sendFailMessage(channel, exception.getMessage());
                 }
+
             }
             if ("add".equalsIgnoreCase(args[0])) {
-                if (option.getValue() instanceof List) {
-                    List<String> list = (List<String>) option.getValue();
-                    list.add(value);
-                    if (list.contains(value)) sendAddSuccessMessage(optionName, value, channel);
+                try {
+                    if (option.getValue() instanceof List) {
+                        List<String> list = (List<String>) option.getValue();
+                        list.add(value);
+                        if (list.contains(value)) sendAddSuccessMessage(optionName, value, channel);
+                    }
+                } catch (InvalidOptionException exception) {
+                    sendFailMessage(channel, exception.getMessage());
                 }
             }
-            if ("remove".equalsIgnoreCase(args[0])) {
-                if (option.getValue() instanceof List) {
-                    List<String> list = (List<String>) option.getValue();
-                    if (list.remove(value)) sendRemoveSuccessMessage(optionName, value, channel);
+            try {
+                if ("remove".equalsIgnoreCase(args[0])) {
+                    if (option.getValue() instanceof List) {
+                        List<String> list = (List<String>) option.getValue();
+                        if (list.remove(value)) sendRemoveSuccessMessage(optionName, value, channel);
+                    }
                 }
+            } catch (InvalidOptionException exception) {
+                sendFailMessage(channel, exception.getMessage());
             }
             config.markDirty();
             BotConfigs.saveAll(guild);
         }
+
+    }
+
+    private void sendFailMessage(MessageChannel channel, String message) {
+        MessageBuilder builder = new MessageBuilder(message);
+        channel.sendMessage(builder.build()).queue();
     }
 
     private void sendConfigHelpMessage(MessageChannel channel) {
@@ -105,7 +136,7 @@ public class ConfigCommand extends BotCommand {
         channel.sendMessage(message).queue();
     }
 
-    private void sendOptionGetMessage(MessageChannel channel, String optionName, Option<?> option) {
+    private void sendOptionGetMessage(MessageChannel channel, String optionName, Option option) {
         MessageBuilder builder = new MessageBuilder();
         builder.append("*").append(optionName).append("*: \n");
         builder.append("Type: ").append((option.getValue()).getClass().getSimpleName()).append("\n");

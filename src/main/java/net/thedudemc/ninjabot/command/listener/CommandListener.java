@@ -26,7 +26,7 @@ public class CommandListener extends ListenerAdapter {
         String content = event.getMessage().getContentRaw();
         if (!content.startsWith("-")) return; // not a command.
 
-        final boolean deleteCommands = guild != null && BotConfigs.getConfig(guild, "General").getBoolean("deleteCommands");
+        final boolean deleteCommands = guild != null && BotConfigs.getConfig(guild, "General").getOption("deleteCommands").getBooleanValue();
 
         try {
             String commandName = content.contains(" ") ? content.substring(1, content.indexOf(" ")) : content.substring(1);

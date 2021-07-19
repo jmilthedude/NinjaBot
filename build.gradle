@@ -28,7 +28,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.34.0")
     implementation("com.vdurmont:emoji-java:5.1.1")
 
-    implementation("net.thedudemc:dudeconfig:0.4.5-SNAPSHOT")
+    implementation("net.thedudemc:dudeconfig:0.5-SNAPSHOT")
 
 }
 
