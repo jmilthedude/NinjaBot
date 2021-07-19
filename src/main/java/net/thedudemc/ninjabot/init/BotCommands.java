@@ -5,6 +5,7 @@ import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
 import net.thedudemc.ninjabot.config.command.ConfigCommand;
 import net.thedudemc.ninjabot.ticket.command.CloseCommand;
+import net.thedudemc.ninjabot.ticket.command.ReopenCommand;
 import net.thedudemc.ninjabot.ticket.command.TicketCommand;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class BotCommands {
         registerCommand(new TicketCommand());
         registerCommand(new CloseCommand().requireElevatedPrivileges());
         registerCommand(new ConfigCommand().requireAdmin());
+        registerCommand(new ReopenCommand());
     }
 
     private static void registerCommand(BotCommand command) {

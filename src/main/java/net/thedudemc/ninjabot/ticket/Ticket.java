@@ -6,6 +6,7 @@ import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.data.Data;
 import net.thedudemc.ninjabot.init.BotData;
 
+import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -155,6 +156,7 @@ public class Ticket implements Data {
         return -1;
     }
 
+    @Nullable
     @Override
     public Data get(long guildId, long channelId) {
         String query = "SELECT CreatorID, CreatorName, Message, CreationTime, ClosedTime, Closed FROM Tickets WHERE ChannelID = ?";
@@ -202,6 +204,22 @@ public class Ticket implements Data {
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 statement.setTimestamp(1, new Timestamp(new Date().getTime()));
                 statement.setBoolean(2, true);
+                statement.setLong(3, this.channelId);
+
+                statement.execute();
+            }
+        } catch (SQLException exception) {
+            logException(exception);
+        }
+    }
+
+    public void reopen() {
+        String query = "UPDATE Tickets SET ClosedTime = ?, Closed = ? WHERE ChannelID = ?";
+
+        try (Connection conn = BotData.getConnection(this.guildId)) {
+            try (PreparedStatement statement = conn.prepareStatement(query)) {
+                statement.setTimestamp(1, null);
+                statement.setBoolean(2, false);
                 statement.setLong(3, this.channelId);
 
                 statement.execute();

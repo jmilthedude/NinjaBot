@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.ticket.Ticket;
 import net.thedudemc.ninjabot.ticket.TicketCreator;
+import net.thedudemc.ninjabot.util.BotUtils;
 import net.thedudemc.ninjabot.util.StringUtilities;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,14 +74,15 @@ public class TicketListener extends ListenerAdapter {
     }
 
     private void sendTicketOpenMessage(Message message, Guild guild, Member member, TextChannel textChannel) {
-        textChannel.sendMessage(new MessageBuilder()
-                .append(member.getAsMention()).append(" here is your ticket. ")
-                .append(Objects.requireNonNull(guild.getRoleById(856998269079257109L)).getAsMention())
-                .append(" will be with you when they are available. Feel free to add more information if needed!")
-                .append("\n \n >>> **Request**: ")
-                .append(message.getContentRaw())
-                .build())
-                .queue(ticket -> sendReplyToPrivate(member));
+        List<Role> superRoles = BotUtils.getSuperUserRoles(guild);
+        MessageBuilder builder = new MessageBuilder();
+        builder.append(member.getAsMention()).append(" here is your ticket. \n");
+        superRoles.forEach(role -> builder.append(role.getAsMention()).append(" "));
+        builder.append("will be with you when they are available. Feel free to add more information if needed!");
+        builder.append("\n \n >>> **Request**: ");
+        builder.append(message.getContentRaw());
+
+        textChannel.sendMessage(builder.build()).queue(ticket -> sendReplyToPrivate(member));
     }
 
     private void sendReplyToPrivate(Member member) {
