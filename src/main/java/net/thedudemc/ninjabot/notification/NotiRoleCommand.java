@@ -35,9 +35,16 @@ public class NotiRoleCommand extends BotCommand {
                 option.setValue(new HashMap<String, String>());
                 config.markDirty();
                 config.save();
-
             } else if ("list".equalsIgnoreCase(args[0])) {
-
+                if (notiRoleChannel.getName().equalsIgnoreCase("notification-roles")) return;
+                MessageBuilder builder = new MessageBuilder("Available emotes and their respective roles: \n\n");
+                Config config = BotConfigs.getConfig(guild, "NotiRole");
+                Option option = config.getOption("reactionRoles");
+                HashMap<String, String> reactionRoles = (HashMap<String, String>) option.getMapValue();
+                reactionRoles.forEach((k, v) -> {
+                    builder.append(k).append(" - ").append(v).append("\n");
+                });
+                channel.sendMessage(builder.build()).queue();
             } else if ("setup".equalsIgnoreCase(args[0])) {
                 if (!notiRoleChannel.getName().equalsIgnoreCase("notification-roles")) return;
                 notiRoleChannel.getHistoryFromBeginning(10).queue(messageHistory -> {
@@ -52,20 +59,28 @@ public class NotiRoleCommand extends BotCommand {
                     }
                 });
             }
-        } else if (args.length == 3) {
-            Config config = BotConfigs.getConfig(guild, "NotiRole");
-            Option option = config.getOption("reactionRoles");
-            HashMap<String, String> reactionRoles = (HashMap<String, String>) option.getMapValue();
-            String emote = args[1];
-            String roleName = args[2];
-            if ("add".equalsIgnoreCase(args[0])) {
-                reactionRoles.put(emote, roleName);
-                System.out.println(reactionRoles);
-            } else if ("remove".equalsIgnoreCase(args[0])) {
-
+        } else if (args.length == 2) {
+            if ("remove".equalsIgnoreCase(args[0])) {
+                Config config = BotConfigs.getConfig(guild, "NotiRole");
+                Option option = config.getOption("reactionRoles");
+                HashMap<String, String> reactionRoles = (HashMap<String, String>) option.getMapValue();
+                String emote = args[1];
+                reactionRoles.remove(emote);
+                config.markDirty();
+                config.save();
             }
-            config.markDirty();
-            config.save();
+        } else if (args.length == 3) {
+
+            if ("add".equalsIgnoreCase(args[0])) {
+                Config config = BotConfigs.getConfig(guild, "NotiRole");
+                Option option = config.getOption("reactionRoles");
+                HashMap<String, String> reactionRoles = (HashMap<String, String>) option.getMapValue();
+                String emote = args[1];
+                String roleName = args[2];
+                reactionRoles.put(emote, roleName);
+                config.markDirty();
+                config.save();
+            }
         }
 
     }
