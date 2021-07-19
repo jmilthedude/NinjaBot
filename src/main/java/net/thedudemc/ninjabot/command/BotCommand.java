@@ -11,6 +11,7 @@ public abstract class BotCommand {
 
     private boolean requiresElevatedPrivileges;
     private boolean requiresAdminPrivileges;
+    private boolean deletable;
 
     public abstract String getName();
 
@@ -28,9 +29,19 @@ public abstract class BotCommand {
         return this;
     }
 
+    public BotCommand setAutoDelete() {
+        this.deletable = true;
+        return this;
+    }
+
+    public boolean shouldDelete() {
+        return deletable;
+    }
+
     public boolean canExecute(Member member) {
+        if (member == null) return false;
+        if (member.isOwner()) return true;
         if (this.requiresElevatedPrivileges || this.requiresAdminPrivileges) {
-            if (member == null) return false;
             List<Role> memberRoles = member.getRoles();
             Config config = BotConfigs.getConfig(member.getGuild(), "General");
             if (requiresAdminPrivileges) {

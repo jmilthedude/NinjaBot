@@ -31,7 +31,6 @@ public class CommandListener extends ListenerAdapter {
         try {
             String commandName = content.contains(" ") ? content.substring(1, content.indexOf(" ")) : content.substring(1);
             BotCommand command = BotCommands.getCommand(commandName);
-
             String[] args = content.contains(" ") ? content.substring(content.indexOf(" ") + 1).split(" ") : null;
 
             if (command.canExecute(event.getMember())) {
@@ -43,11 +42,15 @@ public class CommandListener extends ListenerAdapter {
                                     .append(member.getAsMention()).append(" You do not have permission to execute that command.")
                                     .build())
                             .queue(message -> {
-                                if (deleteCommands) {
+                                if (command.shouldDelete() && deleteCommands) {
                                     message.delete().queueAfter(10, TimeUnit.SECONDS);
                                 }
                             });
                 }
+            }
+
+            if (command.shouldDelete() && deleteCommands) {
+                event.getMessage().delete().queueAfter(2, TimeUnit.SECONDS);
             }
         } catch (InvalidCommandException exception) {
             event.getChannel().sendMessage(new MessageBuilder(exception.getMessage()).build())
@@ -56,10 +59,6 @@ public class CommandListener extends ListenerAdapter {
                             message.delete().queueAfter(10, TimeUnit.SECONDS);
                         }
                     });
-        } finally {
-            if (deleteCommands) {
-                event.getMessage().delete().queueAfter(2, TimeUnit.SECONDS);
-            }
         }
 
     }

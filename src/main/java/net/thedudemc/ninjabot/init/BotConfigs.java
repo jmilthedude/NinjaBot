@@ -5,6 +5,7 @@ import net.thedudemc.dudeconfig.config.Config;
 import net.thedudemc.dudeconfig.config.ConfigRegistry;
 import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.config.GeneralConfig;
+import net.thedudemc.ninjabot.config.NotiRoleConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class BotConfigs {
         NinjaBot.getJDA().getGuilds().forEach(guild -> {
             REGISTRIES.put(guild.getIdLong(), new ConfigRegistry("./config/" + guild.getId() + "/"));
             register(guild, new GeneralConfig());
+            register(guild, new NotiRoleConfig());
         });
 
     }

@@ -4,6 +4,7 @@ import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
 import net.thedudemc.ninjabot.config.command.ConfigCommand;
+import net.thedudemc.ninjabot.notification.NotiRoleCommand;
 import net.thedudemc.ninjabot.ticket.command.CloseCommand;
 import net.thedudemc.ninjabot.ticket.command.ReopenCommand;
 import net.thedudemc.ninjabot.ticket.command.TicketCommand;
@@ -17,10 +18,11 @@ public class BotCommands {
     public static void register() {
         NinjaBot.getLogger().info("Registering commands...");
 
-        registerCommand(new TicketCommand());
+        registerCommand(new TicketCommand().setAutoDelete());
         registerCommand(new CloseCommand().requireElevatedPrivileges());
         registerCommand(new ConfigCommand().requireAdmin());
         registerCommand(new ReopenCommand());
+        registerCommand(new NotiRoleCommand().requireAdmin());
     }
 
     private static void registerCommand(BotCommand command) {
