@@ -38,6 +38,10 @@ public abstract class BotCommand {
         return deletable;
     }
 
+    public boolean requiresAdmin() {
+        return requiresAdminPrivileges;
+    }
+
     public boolean canExecute(Member member) {
         if (member == null) return false;
         if (member.isOwner()) return true;

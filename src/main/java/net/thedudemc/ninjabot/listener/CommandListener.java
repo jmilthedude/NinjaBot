@@ -34,6 +34,20 @@ public class CommandListener extends ListenerAdapter {
             String[] args = content.contains(" ") ? content.substring(content.indexOf(" ") + 1).split(" ") : null;
 
             if (command.canExecute(event.getMember())) {
+                if (command.requiresAdmin() && !event.getChannel().getName().equalsIgnoreCase("bot-commands")) {
+                    if (member == null) return;
+                    event.getMessage().delete().queueAfter(2, TimeUnit.SECONDS);
+                    event.getChannel().sendMessage(
+                            new MessageBuilder()
+                                    .append(member.getAsMention()).append(" NinjaBot commands should be executed in the appropriate channel.")
+                                    .build())
+                            .queue(message -> {
+                                if (command.shouldDelete() && deleteCommands) {
+                                    message.delete().queueAfter(10, TimeUnit.SECONDS);
+                                }
+                            });
+                    return;
+                }
                 command.execute(guild, member, event.getChannel(), event.getMessage(), args);
             } else {
                 if (member != null) {

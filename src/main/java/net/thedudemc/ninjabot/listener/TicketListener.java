@@ -3,6 +3,7 @@ package net.thedudemc.ninjabot.listener;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.thedudemc.ninjabot.NinjaBot;
@@ -18,9 +19,54 @@ public class TicketListener extends ListenerAdapter {
 
     private static final Set<TicketCreator> ticketCreators = new HashSet<>();
 
-    public static void addTicketCreator(Guild guild, Member member) {
+    private void addTicketCreator(Guild guild, Member member) {
         ticketCreators.add(new TicketCreator(guild.getIdLong(), member.getIdLong()));
     }
+
+    @Override
+    public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
+
+        if (!event.getChannel().getName().equalsIgnoreCase("help-request")) return;
+
+        event.getChannel().getHistoryFromBeginning(1)
+                .queue(messageHistory -> {
+
+                    if (!messageHistory.isEmpty()) {
+
+                        Optional<Message> messageOptional = messageHistory.getRetrievedHistory().stream().findFirst();
+
+                        messageOptional.ifPresent(message ->
+                                event.retrieveMember()
+                                        .queue(member -> {
+                                            if (BotUtils.isAdmin(event.getGuild(), member)) return;
+
+                                            TicketCreator creator = new TicketCreator(event.getGuild().getIdLong(), member.getIdLong());
+                                            User user = member.getUser();
+
+                                            if (ticketCreators.contains(creator)) {
+                                                user.openPrivateChannel().flatMap(privateChannel ->
+                                                        privateChannel.sendMessage(
+                                                                "Hello! You have already initiated a ticket to be opened. " +
+                                                                        "Please respond with your issue here."
+                                                        )
+                                                ).queue();
+                                            } else {
+                                                user.openPrivateChannel().flatMap(privateChannel ->
+                                                        privateChannel.sendMessage(
+                                                                "Hello! You have initiated a ticket to be opened. " +
+                                                                        "If you did not mean to do this, type cancel. " +
+                                                                        "Otherwise, respond with your issue here."
+                                                        )
+                                                ).queue(msg -> this.addTicketCreator(event.getGuild(), member));
+                                            }
+                                            message.removeReaction(event.getReactionEmote().getAsReactionCode(), member.getUser()).queue();
+                                        })
+                        );
+                    }
+                });
+        super.onGuildMessageReactionAdd(event);
+    }
+
 
     @Override
     public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
@@ -55,11 +101,10 @@ public class TicketListener extends ListenerAdapter {
     private void createNewTicket(TicketCreator creator, Message message) {
         Guild guild = NinjaBot.getJDA().getGuildById(creator.getGuildId());
         if (guild == null) return;
-        Member member = guild.getMemberById(creator.getMemberId());
-        if (member == null) return;
-
-        Optional<Category> tickets = guild.getCategoriesByName("tickets", true).stream().findFirst();
-        tickets.ifPresent(category -> createTicketChannel(message, guild, member, category));
+        guild.retrieveMemberById(creator.getMemberId()).queue(member -> {
+            Optional<Category> tickets = guild.getCategoriesByName("tickets", true).stream().findFirst();
+            tickets.ifPresent(category -> createTicketChannel(message, guild, member, category));
+        });
     }
 
     private void createTicketChannel(Message message, Guild guild, Member member, Category category) {
