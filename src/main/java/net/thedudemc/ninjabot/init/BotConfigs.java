@@ -17,12 +17,17 @@ public class BotConfigs {
 
     public static void register() {
         NinjaBot.getLogger().info("Registering configs...");
-        NinjaBot.getJDA().getGuilds().forEach(guild -> {
-            REGISTRIES.put(guild.getIdLong(), new ConfigRegistry("./config/" + guild.getId() + "/"));
-            register(guild, new GeneralConfig());
-            register(guild, new NotiRoleConfig());
-        });
+        NinjaBot.getJDA().getGuilds().forEach(BotConfigs::registerGuild);
+    }
 
+    public static void registerGuild(Guild guild) {
+        addRegistry(guild);
+        register(guild, new GeneralConfig());
+        register(guild, new NotiRoleConfig());
+    }
+
+    private static void addRegistry(Guild guild) {
+        REGISTRIES.put(guild.getIdLong(), new ConfigRegistry("./config/" + guild.getId() + "/"));
     }
 
     private static void register(Guild guild, Config config) {

@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.ticket.listener;
+package net.thedudemc.ninjabot.listener;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.Permission;

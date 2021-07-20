@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.ticket.command;
+package net.thedudemc.ninjabot.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -28,7 +28,7 @@ public class CloseCommand extends BotCommand {
             // TODO: tell user there is not a ticket.
             return;
         }
-        Optional<Category> archive = guild.getCategoriesByName("Ticket Archive", true).stream().findFirst();
+        Optional<Category> archive = guild.getCategoriesByName("Closed Tickets", true).stream().findFirst();
 
         archive.ifPresent(category -> {
             sendCloseMessage(channel, category);

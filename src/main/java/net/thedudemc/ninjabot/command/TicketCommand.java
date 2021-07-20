@@ -1,9 +1,8 @@
-package net.thedudemc.ninjabot.ticket.command;
+package net.thedudemc.ninjabot.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.thedudemc.ninjabot.command.BotCommand;
-import net.thedudemc.ninjabot.ticket.listener.TicketListener;
+import net.thedudemc.ninjabot.listener.TicketListener;
 import org.jetbrains.annotations.Nullable;
 
 public class TicketCommand extends BotCommand {

@@ -1,9 +1,9 @@
 package net.thedudemc.ninjabot.init;
 
 import net.thedudemc.ninjabot.NinjaBot;
-import net.thedudemc.ninjabot.command.listener.CommandListener;
-import net.thedudemc.ninjabot.notification.NotiRoleListener;
-import net.thedudemc.ninjabot.ticket.listener.TicketListener;
+import net.thedudemc.ninjabot.listener.CommandListener;
+import net.thedudemc.ninjabot.listener.NotiRoleListener;
+import net.thedudemc.ninjabot.listener.TicketListener;
 
 public class BotListeners {
 

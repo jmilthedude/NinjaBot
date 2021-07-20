@@ -1,10 +1,9 @@
-package net.thedudemc.ninjabot.notification;
+package net.thedudemc.ninjabot.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.thedudemc.dudeconfig.config.Config;
 import net.thedudemc.dudeconfig.config.option.Option;
-import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.init.BotConfigs;
 import org.jetbrains.annotations.Nullable;
 

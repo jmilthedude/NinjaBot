@@ -4,10 +4,10 @@ import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.command.BotCommand;
 import net.thedudemc.ninjabot.command.exception.InvalidCommandException;
 import net.thedudemc.ninjabot.config.command.ConfigCommand;
-import net.thedudemc.ninjabot.notification.NotiRoleCommand;
-import net.thedudemc.ninjabot.ticket.command.CloseCommand;
-import net.thedudemc.ninjabot.ticket.command.ReopenCommand;
-import net.thedudemc.ninjabot.ticket.command.TicketCommand;
+import net.thedudemc.ninjabot.command.NotiRoleCommand;
+import net.thedudemc.ninjabot.command.CloseCommand;
+import net.thedudemc.ninjabot.command.ReopenCommand;
+import net.thedudemc.ninjabot.command.TicketCommand;
 
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.ticket.command;
+package net.thedudemc.ninjabot.command;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;

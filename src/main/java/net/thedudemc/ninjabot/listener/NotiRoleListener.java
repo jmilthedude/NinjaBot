@@ -1,4 +1,4 @@
-package net.thedudemc.ninjabot.notification;
+package net.thedudemc.ninjabot.listener;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;

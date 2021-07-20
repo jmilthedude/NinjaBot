@@ -17,14 +17,14 @@ public class BotData {
         NinjaBot.getLogger().info("Registering database...");
         createFile(new File("./data/"));
 
-        NinjaBot.getJDA().getGuilds().forEach(BotData::register);
+        NinjaBot.getJDA().getGuilds().forEach(BotData::registerGuild);
     }
 
     private static boolean createFile(File file) {
         return file.mkdirs();
     }
 
-    private static void register(Guild guild) {
+    public static void registerGuild(Guild guild) {
         DATABASE_MANAGERS.put(guild.getIdLong(), new DatabaseManager(guild.getIdLong()));
     }
 
