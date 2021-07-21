@@ -8,9 +8,11 @@ import net.thedudemc.dudeconfig.config.Config;
 import net.thedudemc.dudeconfig.config.option.Option;
 import net.thedudemc.ninjabot.NinjaBot;
 import net.thedudemc.ninjabot.init.BotConfigs;
+import net.thedudemc.ninjabot.notirole.NotiRole;
+import net.thedudemc.ninjabot.util.BotUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public class NotiRoleListener extends ListenerAdapter {
@@ -20,7 +22,7 @@ public class NotiRoleListener extends ListenerAdapter {
         if (!event.getChannel().getName().equalsIgnoreCase("notification-roles")) return;
         Config config = BotConfigs.getConfig(event.getGuild(), "NotiRole");
         Option option = config.getOption("reactionRoles");
-        HashMap<String, String> reactionRoles = (HashMap<String, String>) option.getMapValue();
+        List<NotiRole> reactionRoles = BotUtils.getReactionRoles(event.getGuild());
 
         event.retrieveMember().queue(member -> handleReaction(event.getGuild(), member, event.getChannel(), reactionRoles, event.getReactionEmote(), true));
 
@@ -32,11 +34,11 @@ public class NotiRoleListener extends ListenerAdapter {
         if (!event.getChannel().getName().equalsIgnoreCase("notification-roles")) return;
         Config config = BotConfigs.getConfig(event.getGuild(), "NotiRole");
         Option option = config.getOption("reactionRoles");
-        HashMap<String, String> reactionRoles = (HashMap<String, String>) option.getMapValue();
+        List<NotiRole> reactionRoles = BotUtils.getReactionRoles(event.getGuild());
         event.retrieveMember().queue(member -> handleReaction(event.getGuild(), member, event.getChannel(), reactionRoles, event.getReactionEmote(), false));
     }
 
-    private void handleReaction(Guild guild, Member member, TextChannel channel, HashMap<String, String> reactionRoles, MessageReaction.ReactionEmote reaction, boolean add) {
+    private void handleReaction(Guild guild, Member member, TextChannel channel, List<NotiRole> reactionRoles, MessageReaction.ReactionEmote reaction, boolean add) {
         if (member.isOwner()) return;
 
         channel.getHistoryFromBeginning(1).queue(messageHistory -> {
@@ -47,12 +49,12 @@ public class NotiRoleListener extends ListenerAdapter {
                         String roleName = null;
                         if (reaction.isEmoji()) {
                             String emojiString = reaction.getAsReactionCode();
-                            roleName = reactionRoles.get(emojiString);
+                            roleName = BotUtils.getRoleByReaction(emojiString, reactionRoles);
                         }
                         if (reaction.isEmote()) {
                             Emote emote = reaction.getEmote();
                             String emoteString = emote.getAsMention();
-                            roleName = reactionRoles.get(emoteString);
+                            roleName = BotUtils.getRoleByReaction(emoteString, reactionRoles);
                         }
                         if (roleName != null) {
                             for (Role role : guild.getRoles()) {
